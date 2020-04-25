@@ -9,7 +9,7 @@ template <class T>
 class FileRepoSTLTemplate : public RepoSTLTemplate<T>
 {
 private:
-	char* fileName;
+	char *fileName;
 
 public:
 	/*
@@ -20,7 +20,8 @@ public:
 	/*
 	Parameterized constructor
 	*/
-	FileRepoSTLTemplate(const char* fileName) {
+	FileRepoSTLTemplate(const char *fileName)
+	{
 		this->fileName = new char[strlen(fileName) + 1];
 		strcpy(this->fileName, fileName);
 		this->fileName[strlen(fileName)] = 0;
@@ -80,26 +81,33 @@ public:
 	*/
 	void load()
 	{
-		try {
+		try
+		{
 			if (this->fileName == NULL)
 				return;
 			std::ifstream in(this->fileName);
-			int size;
-			in >> size;
-			in.get();
-			for (int i = 0; i < size; i++)
+			if (in.good())
 			{
-				T t;
-				std::string inStr;
-				getline(in, inStr);
-				t.fromString(inStr);
-				this->addElem(t);
+				int size;
+				in >> size;
+				std::cout << std::endl
+						  << "T" << this->fileName << size << "F" << std::endl;
+				in.get();
+				for (int i = 0; i < size; i++)
+				{
+					T t;
+					std::string inStr;
+					getline(in, inStr);
+					std::cout << inStr << std::endl;
+					t.fromString(inStr);
+					this->addElem(t);
+				}
+				in.close();
 			}
-			in.close();
 		}
-		catch (int e) {
+		catch (int e)
+		{
 			std::cout << "Failed loading from file.\n";
 		};
 	}
 };
-
