@@ -44,10 +44,12 @@ char *Medicine::getBrand() { return this->brand; }
 
 void Medicine::setName(const char *name)
 {
+    std::cout<<"Feee";
     delete[] this->name;
     this->name = new char[strlen(name) + 1];
     strcpy(this->name, name);
     this->name[strlen(name)] = 0;
+    std::cout<<name;
 }
 
 void Medicine::setPrescriptionRequirement(bool value)
@@ -70,6 +72,29 @@ void Medicine::setBrand(const char *brand)
 
 void Medicine::fromString(std::string info)
 {
+    int i1 = info.length()-1, i2 = info.length()-1;
+	while (info[i1] != '|')
+		i1--;
+	this->setBrand(info.substr(i1 + 1, i2 - i1).c_str());
+	i1--;
+	i2 = i1;
+    while (info[i1] != '|')
+		i1--;
+	this->setStockCount(stod(info.substr(i1+1, i2-i1+1)));
+	i1--;
+	i2 = i1;
+	while (info[i1] != '|')
+		i1--;
+	this->setPrescriptionRequirement(info.substr(i1 + 1, i2 - i1).c_str()=="true");
+    i1--;
+	i2 = i1;
+	while (info[i1] != '|')
+		i1--;
+	this->setName(info.substr(i1 + 1, i2 - i1).c_str());
+	i2 = i1;
+	i2--;
+	i1 = 0;
+	this->setId(stoi(info.substr(i1, i2-i1+1)));
 }
 
 Medicine &Medicine::operator=(const Medicine &s)
@@ -107,6 +132,11 @@ bool Medicine::operator!=(const Medicine &s) { return !(this->operator==(s)); }
 
 std::ostream &operator<<(std::ostream &os, const Medicine &s)
 {
-    os << s.entityId << "|" << s.name << "|" << s.prescription << "|" << s.stockCount << "|" << s.brand;
+    os << s.entityId << "|" << s.name << "|";
+    if(s.prescription)
+        os<<"true";
+    else
+        os<<"false";
+    os << "|" << s.stockCount << "|" << s.brand;
     return os;
 }
