@@ -44,12 +44,10 @@ char *Medicine::getBrand() { return this->brand; }
 
 void Medicine::setName(const char *name)
 {
-    std::cout<<"Feee";
     delete[] this->name;
     this->name = new char[strlen(name) + 1];
     strcpy(this->name, name);
     this->name[strlen(name)] = 0;
-    std::cout<<name;
 }
 
 void Medicine::setPrescriptionRequirement(bool value)
