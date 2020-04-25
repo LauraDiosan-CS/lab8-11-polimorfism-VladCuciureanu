@@ -25,6 +25,19 @@ int main()
     assert(strcmp(md2.getBrand(), "ccc") == 0);
     assert(md1 != md2);
     //Employees:
+    Employee ed1(0, "vlad", "vlad", 9);
+    Employee ed2 = ed1;
+    ed2.fromString("0|vlad|vlad|9");
+    assert(ed1==ed2);
+    ed2.setId(1);
+    ed2.setName("test");
+    ed2.setEmail("best");
+    ed2.setClearanceLevel(8);
+    assert(ed2.getId()==1);
+    assert(strcmp(ed2.getName(),"test")==0);
+    assert(strcmp(ed2.getEmail(), "best")==0);
+    assert(ed2.getClearanceLevel()==8);
+    assert(ed1!=ed2);
 
     //Repo testing
     //Medicine:
