@@ -26,7 +26,7 @@ int main()
     assert(*repo->getAll()[0] == m1_new);
 
     repo->remove(200);
-    assert(repo->getAll().size() == 3);
+    assert(repo->getAll().size() == 2);
     std::cout << "Passed all tests successfully!";
     return 0;
 }

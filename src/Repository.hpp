@@ -66,13 +66,12 @@ public:
 
     void remove(int id)
     {
-        
         for (int i = 0; i < this->elems.size(); i++)
         {
             Entity* t = this->elems.at(i);
             if(t->entityId==id)
             {
-                delete this->elems[i];
+                this->elems.erase(this->elems.begin()+i);
                 return;
             }
         }

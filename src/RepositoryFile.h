@@ -44,6 +44,11 @@ public:
 		this->saveToFile();
 	}
 
+	void remove(int id)
+	{
+		Repository<T>::remove(id);
+	}
+
 	void remove(T *p)
 	{
 		Repository<T>::remove(p);
