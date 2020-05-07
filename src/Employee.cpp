@@ -1,4 +1,5 @@
-#include <Employee.hpp>
+#include "Employee.hpp"
+#include <string>
 
 Employee::Employee()
 {
@@ -39,12 +40,12 @@ Employee::~Employee()
     this->clearanceLevel = 0;
 }
 
-char* Employee::getName()
+char *Employee::getName()
 {
     return this->name;
 }
 
-char* Employee::getEmail()
+char *Employee::getEmail()
 {
     return this->email;
 }
@@ -54,7 +55,7 @@ int Employee::getClearanceLevel()
     return this->clearanceLevel;
 }
 
-void Employee::setName(const char* name)
+void Employee::setName(const char *name)
 {
     delete[] this->name;
     this->name = new char[strlen(name) + 1];
@@ -62,39 +63,52 @@ void Employee::setName(const char* name)
     this->name[strlen(name)] = 0;
 }
 
-void Employee::setEmail(const char* email)
+void Employee::setEmail(const char *email)
 {
     delete[] this->email;
     this->email = new char[strlen(email) + 1];
     strcpy(this->email, email);
     this->email[strlen(email)] = 0;
 }
-    
+
 void Employee::setClearanceLevel(const int clearanceLevel)
 {
     this->clearanceLevel = clearanceLevel;
 }
 
-void Employee::fromString(std::string info)
+std::string Employee::toString(char separator)
 {
-    int i1 = info.length()-1, i2 = info.length()-1;
-	while (info[i1] != '|')
-		i1--;
-	this->setClearanceLevel(stod(info.substr(i1+1, i2-i1+1)));
-	i1--;
-	i2 = i1;
-	while (info[i1] != '|')
-		i1--;
-	this->setEmail(info.substr(i1 + 1, i2 - i1).c_str());
-	i1--;
-	i2 = i1;
-	while (info[i1] != '|')
-		i1--;
-	this->setName(info.substr(i1 + 1, i2 - i1).c_str());
-	i2 = i1;
-	i2--;
-	i1 = 0;
-	this->setId(stoi(info.substr(i1, i2-i1+1)));
+    std::string output = "";
+    output += std::to_string(this->entityId);
+    output += separator;
+    output += std::string(this->name);
+    output += separator;
+    output += std::string(this->email);
+    output += separator;
+    output += std::to_string(this->clearanceLevel);
+    return output;
+}
+
+void Employee::fromString(std::string info, char separator)
+{
+    int i1 = info.length() - 1, i2 = info.length() - 1;
+    while (info[i1] != separator)
+        i1--;
+    this->setClearanceLevel(stod(info.substr(i1 + 1, i2 - i1 + 1)));
+    i1--;
+    i2 = i1;
+    while (info[i1] != separator)
+        i1--;
+    this->setEmail(info.substr(i1 + 1, i2 - i1).c_str());
+    i1--;
+    i2 = i1;
+    while (info[i1] != separator)
+        i1--;
+    this->setName(info.substr(i1 + 1, i2 - i1).c_str());
+    i2 = i1;
+    i2--;
+    i1 = 0;
+    this->setId(stoi(info.substr(i1, i2 - i1 + 1)));
 }
 
 Employee &Employee::operator=(const Employee &e)
@@ -112,7 +126,7 @@ Employee &Employee::operator=(const Employee &e)
 
 bool Employee::operator==(const Employee &s)
 {
-    if(this->getId()!=s.entityId)
+    if (this->getId() != s.entityId)
         return false;
     if (strcmp(this->name, s.name) != 0)
         return false;
@@ -133,4 +147,9 @@ std::ostream &operator<<(std::ostream &os, const Employee &s)
 {
     os << s.entityId << "|" << s.name << "|" << s.email << "|" << s.clearanceLevel;
     return os;
+}
+
+Employee* Employee::clone()
+{
+    return new Employee(this->entityId, this->name, this->email, this->clearanceLevel);
 }

@@ -7,8 +7,7 @@ include(GNUInstallDirs)
 add_executable(run_tests)
 
 file(GLOB src_files
-  "${CMAKE_SOURCE_DIR}/src/Domain/*.cpp"
-  "${CMAKE_SOURCE_DIR}/src/Repository/*.cpp"
+  "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
 
 target_sources(run_tests
@@ -19,8 +18,7 @@ target_sources(run_tests
 
   target_include_directories(run_tests
   PRIVATE
-  "${CMAKE_SOURCE_DIR}/include/pharmacy/Domain"
-  "${CMAKE_SOURCE_DIR}/include/pharmacy/Repository"
+  "${CMAKE_SOURCE_DIR}/src"
   )
 
 target_compile_features(run_tests

@@ -38,7 +38,9 @@ public:
     void setClearanceLevel(const int clearanceLevel);
 
     //Parses employee object from string
-	void fromString(std::string info);
+	void fromString(std::string info, char separator);
+
+    std::string toString(char separator);
 
 	//Copy operator
 	Employee& operator=(const Employee& s);
@@ -51,4 +53,6 @@ public:
 
     //Serializer
 	friend std::ostream& operator<<(std::ostream& os, const Employee& s);
+
+    Employee* clone();
 };

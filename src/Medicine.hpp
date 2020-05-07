@@ -1,6 +1,6 @@
 #include <Entity.hpp>
 
-class Medicine : public Entity
+class Medicament : public Entity
 {
 private:
     char *name;
@@ -10,20 +10,21 @@ private:
 
 public:
     //Blank constructor
-    Medicine();
+    Medicament();
 
     //Parameterized constructor
-    Medicine(unsigned int id, const char *name, bool prescription, unsigned int stockCount, const char *brand);
+    Medicament(unsigned int id, const char *name, bool prescription, unsigned int stockCount, const char *brand);
 
     //Copy constructor
-    Medicine(const Medicine &m);
+    Medicament(const Medicament &m);
 
     //Destructor
-    ~Medicine();
+    ~Medicament();
 
     //Name getter
     char *getName();
 
+    int getId();
     //Prescription requirement getter
     bool getPrescriptionRequirement();
 
@@ -45,18 +46,22 @@ public:
     //Brand setter
     void setBrand(const char *brand);
 
+    std::string toString(char separator);
+
     //Parses medicine object from string
-    void fromString(std::string info);
+    void fromString(std::string info, char separator);
 
     //Copy operator
-    Medicine &operator=(const Medicine &s);
+    Medicament &operator=(const Medicament &s);
 
     //Equals operator
-    bool operator==(const Medicine &s);
+    bool operator==(const Medicament &s);
 
     //Not equals operator
-    bool operator!=(const Medicine &s);
+    bool operator!=(const Medicament &s);
 
     //Serializer
-    friend std::ostream &operator<<(std::ostream &os, const Medicine &s);
+    friend std::ostream &operator<<(std::ostream &os, const Medicament &s);
+
+    Medicament* clone();
 };
