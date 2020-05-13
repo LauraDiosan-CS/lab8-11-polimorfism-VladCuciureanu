@@ -1,65 +1,52 @@
 #pragma once
-#include "Entity.hpp"
-#include <vector>
-#include <string>
-#include <fstream>
-#include "Repository.hpp"
-
-using namespace std;
+#include "Repository.h"
 
 template <class T>
 class RepositoryFile : public Repository<T>
 {
 protected:
-	std::string fileName;
-
+	std::string fileName; // Repo file name
 public:
-	RepositoryFile()
+	RepositoryFile() // Blank constructor
+	{
+	}
+	RepositoryFile(std::string fileName) // Parameterized constructor
+	{
+		this->fileName = fileName;
+	}
+	~RepositoryFile() // Destructor
 	{
 	}
 
-	RepositoryFile(string fileName)
+	void setFileName(std::string fileName) // File name setter
 	{
 		this->fileName = fileName;
 	}
 
-	~RepositoryFile()
+	virtual void add(T* t) override // Add referenced object to repo
 	{
-	}
-
-	void setFileName(string fileName)
-	{
-		this->fileName = fileName;
-	}
-
-	void add(T *p)
-	{
-		Repository<T>::add(p);
+		Repository<T>::add(t);
 		this->saveToFile();
 	}
 
-	void update(T *pVechi, T *pNou)
+	virtual void update(T* tVechi, T* tNou) override // Updates referenced object with the values of the second referenced object
 	{
-		Repository<T>::update(pVechi, pNou);
+		Repository<T>::update(tVechi, tNou);
 		this->saveToFile();
 	}
 
-	void remove(int id)
+	virtual void remove(int id) override // Removes the object with the given id from the repo
 	{
 		Repository<T>::remove(id);
-	}
-
-	void remove(T *p)
-	{
-		Repository<T>::remove(p);
 		this->saveToFile();
 	}
 
-	void emptyRepo()
+	virtual void remove(T* t) override // Removes the referenced object from the repo
 	{
-		Repository<T>::emptyRepo();
+		Repository<T>::remove(t);
 		this->saveToFile();
 	}
-	virtual void loadFromFile() = 0;
+
+	virtual void loadFromFile() = 0	;
 	virtual void saveToFile() = 0;
 };

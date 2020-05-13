@@ -1,50 +1,45 @@
 #pragma once
+#include <fstream>
 #include "RepositoryFile.h"
 
 template <class T>
 class RepositoryFileTXT : public RepositoryFile<T>
 {
 public:
-	RepositoryFileTXT()
+	RepositoryFileTXT() // Blank constructor
+	{
+
+	}
+	RepositoryFileTXT(std::string fileName) : RepositoryFile<T>(fileName) // Parameterized constructor
+	{
+		this->loadFromFile();
+	}
+	~RepositoryFileTXT() // Destructor
 	{
 	}
-
-	RepositoryFileTXT(string fileName)
+	void loadFromFile() override // Loads objects from file
 	{
-		this->fileName = fileName;
-	}
-
-	~RepositoryFileTXT()
-	{
-	}
-
-	void loadFromFile()
-	{
-		ifstream f(this->fileName);
+		std::ifstream f(this->fileName);
 		if (f.is_open())
 		{
 			this->emptyRepo();
-			string linie;
-			string delim = "|";
+			std::string linie;
+			std::string delimitator = "|";
 			while (getline(f, linie))
 			{
-				T* temp = new T();
-				std::string f = linie;
-				temp->fromString(f,'|');
-				RepositoryFile<T>::add(temp);
+				this->add(T::fromString("|", linie));
 			}
 			f.close();
 		}
 	}
-
-	void saveToFile()
+	void saveToFile() override // Saves objects to file
 	{
-		ofstream f(this->fileName);
+		std::ofstream f(this->fileName);
 		if (f.is_open())
 		{
-			for (Entity *elem : this->elems)
+			for (Entity* elem : this->items)
 			{
-				f << elem->toString("|") << endl;
+				f << elem->toString("|") << std::endl;
 			}
 		}
 	}
