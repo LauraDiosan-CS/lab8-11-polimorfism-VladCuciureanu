@@ -20,12 +20,12 @@ LoginHandler::~LoginHandler()
 
 bool LoginHandler::login(std::string email)
 {
-	std::vector<Utilizator> users = this->su->getUtilizatori();
-	for (Utilizator u : users)
+	std::vector<Utilizator*> users = this->su->getAll();
+	for (Utilizator* u : users)
 	{
-		if (u.getEmail() == email)
+		if (u->getEmail() == email)
 		{
-			this->user_id = u.getId();
+			this->user_id = u->getId();
 			return true;
 		}
 	}

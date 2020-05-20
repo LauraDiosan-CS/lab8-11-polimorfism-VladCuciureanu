@@ -12,17 +12,32 @@ int main()
 	RepositoryFileCSV<Utilizator>* userRepository = new RepositoryFileCSV<Utilizator>("users.dat");
 	RepositoryFileCSV<Medicament>* medicineRepository = new RepositoryFileCSV<Medicament>("meds.dat");
 	ServiceUtilizator* userService = new ServiceUtilizator(userRepository);
-	ServiceMedicament* medsService = new ServiceMedicament(medicineRepository);
+	MedicineService* medsService = new MedicineService(medicineRepository);
 	LoginHandler* loginHandler = new LoginHandler(userService);
 	UserInterface* userInterface = new UserInterface(userService, medsService, loginHandler);
 
+	//userService->add("Vlad", "t", 9);
 	while (!should_exit)
 	{
 		userInterface->login_loop();
 		should_exit = loginHandler->should_exit;
 		if (!should_exit)
 		{
-			//UI loop
+			std::cout << "--------------------------------------------------------\n";
+			std::cout << "\nMedicamente:\n\n";
+			for (Medicament* m : medsService->getAll())
+			{
+				std::cout << m->toString(", ") << '\n';
+			}
+			std::cout << "--------------------------------------------------------\n";
+			std::cout << "\nUtilizatori:\n\n";
+			for (Utilizator* u : userService->getAll())
+			{
+				std::cout << u->toString(", ") << '\n';
+			}
+			std::cout << "\n--------------------------------------------------------\n";
+			std::cout << "\n";
+			userInterface->loop(loginHandler->user_id);
 		}
 	}
 	return 0;

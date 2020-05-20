@@ -9,14 +9,14 @@ class UserInterface
 {
 protected:
 	// References to various services
-	ServiceMedicament* sm;
+	MedicineService* sm;
 	ServiceUtilizator* su;
 	LoginHandler* lh;
 public:
 	UserInterface(); // Blank constructor
-	UserInterface(ServiceUtilizator* su, ServiceMedicament* sm, LoginHandler* lh); // Parameterized constructor
+	UserInterface(ServiceUtilizator* su, MedicineService* sm, LoginHandler* lh); // Parameterized constructor
 	~UserInterface(); // Destructor
 	void login_loop(); // Login loop
-	void loop(); // Main UI loop
+	void loop(int loggedUserId); // Main UI loop
 };
 

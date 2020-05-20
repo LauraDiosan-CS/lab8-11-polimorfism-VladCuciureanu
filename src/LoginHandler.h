@@ -10,7 +10,6 @@ public:
 	LoginHandler(); // Blank constructor
 	LoginHandler(ServiceUtilizator* su); // Parameterized constructor
 	~LoginHandler(); // Destructor
-	void loop(); // UI Login loop
 	bool login(std::string email); // Login method
 };
 
