@@ -12,4 +12,6 @@ void UtilizatorValidator::validate(Utilizator* u)
 		throw "User clearance level must be greater or equal to 0.";
 	if (u->getEmail() == "")
 		throw "User email must not be blank.";
+	if (u->getPass() == "")
+		throw "User pass must not be blank.";
 }

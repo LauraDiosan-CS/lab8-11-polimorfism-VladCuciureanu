@@ -12,11 +12,12 @@ public:
 	ServiceUtilizator(Repository<Utilizator>* repo); // Parameterized constructor
 	~ServiceUtilizator(); // Destructor
 	void add(Utilizator* u);
-	void add(std::string name, std::string email, int level); // Tries to add an user to the repo
+	void add(std::string name, std::string email, std::string pass, int level); // Tries to add an user to the repo
 	std::vector<Utilizator*> getAll(); // Returns all users
 	Utilizator getUtilizatorById(int id); // Returns the user with given id
 	void update(Utilizator* uOld, Utilizator* uNew); // Updates the user with given id with given values.
-	void update(int id, std::string name, std::string email, int level); // Updates the user with given id with given values.
+	void update(int id, std::string name, std::string email, std::string newPass, int level); // Updates the user with given id with given values.
 	void remove(int id); // Deletes the user with the given id.
+	void update_clearance(int loggedInId, int actorId, int newLevel);
 };
 

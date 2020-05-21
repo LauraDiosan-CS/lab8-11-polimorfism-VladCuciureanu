@@ -1,5 +1,23 @@
 #include "Tests.h"
 #include <assert.h>
+#include <stdexcept>
+#include <random>
+
+std::string random_string(size_t length)
+{
+	auto randchar = []() -> char
+	{
+		const char charset[] =
+			"0123456789"
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			"abcdefghijklmnopqrstuvwxyz";
+		const size_t max_index = (sizeof(charset) - 1);
+		return charset[rand() % max_index];
+	};
+	std::string str(length, 0);
+	std::generate_n(str.begin(), length, randchar);
+	return str;
+}
 
 void Tests::run_tests()
 {
@@ -54,21 +72,88 @@ void Tests::run_tests()
 	}
 	{
 		Repository<Utilizator>* ur = new Repository<Utilizator>();
-		Utilizator* f = new Utilizator(1, "vlad", "t", 9);
+		Utilizator* f = new Utilizator(1, "vlad", "t","f", 9);
 		ur->add(f);
 		ServiceUtilizator* su = new ServiceUtilizator(ur);
 		LoginHandler* lh = new LoginHandler(su);
-		assert(lh->login("t") == true);
+		try {
+			assert(lh->login("t", "f") == true); // login
+		}
+		catch (std::exception ex)
+		{
+			std::cout << ex.what();
+		}
+		lh->logout(); // logout
+		try {
+			assert(lh->login("t", "f") == true); // login
+		}
+		catch (std::exception ex)
+		{
+			std::cout << ex.what();
+		}
 		assert(lh->should_exit == false);
 		bool trigger = false;
+		// invalid email
 		try {
-			lh->login("f");
+			lh->login("f","t");
 		}
-		catch (const char* exception)
+		catch (std::exception ex)
 		{
-			trigger = true;
+			assert(strcmp(ex.what(), "Invalid email! Try again") == 0);
 		}
-		assert(trigger);
+		// invalid pass
+		try {
+			lh->login("t", "t");
+		}
+		catch (std::exception ex)
+		{
+			assert(strcmp(ex.what(), "Invalid password! Try again") == 0);
+		}
+	}
+	{
+		int e_count = rand() % 100 + 101; // random 100 + 200
+		Repository<Utilizator>* ur = new Repository<Utilizator>();
+		ServiceUtilizator* su = new ServiceUtilizator(ur);
+		LoginHandler* lh = new LoginHandler(su);
+		// generare
+		for (int i = 0; i < e_count; i++)
+		{
+			std::string lname = random_string(10);
+			std::string sname = random_string(10);
+			std::string name = sname + " " + lname;
+			std::string email = sname + "@" + lname + ".com";
+			std::string pass = random_string(10);
+			int level = rand() % 10;
+			su->add(name, email, pass, level);
+		}
+		// executare
+		int a_index, b_index;
+		a_index = rand() % su->getAll().size();
+		b_index = a_index;
+		while (b_index == a_index)
+			b_index = rand() % su->getAll().size();
+		int count = 0;
+		while (count < 1000)
+		{
+			Utilizator u = su->getUtilizatorById(a_index);
+			Utilizator u2 = su->getUtilizatorById(b_index);
+			lh->login(u.getEmail(), u.getPass());
+			if (u.getLevel() > u2.getLevel())
+			{
+				su->update_clearance(u.getId(), u2.getId(), rand() % u.getLevel());
+				count++;
+			}
+			else
+			{
+				try {
+					su->update_clearance(u.getId(), u2.getId(), rand() % u.getLevel());
+				}
+				catch (std::exception ex)
+				{
+					count++;
+				}
+			}
+		}
 	}
 	std::cout << "Passed all tests successfully.\n";
 }

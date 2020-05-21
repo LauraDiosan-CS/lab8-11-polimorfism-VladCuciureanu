@@ -1,4 +1,5 @@
 #include "LoginHandler.h"
+#include <stdexcept>
 
 LoginHandler::LoginHandler()
 {
@@ -18,16 +19,29 @@ LoginHandler::~LoginHandler()
 {
 }
 
-bool LoginHandler::login(std::string email)
+bool LoginHandler::login(std::string email, std::string pass)
 {
 	std::vector<Utilizator*> users = this->su->getAll();
 	for (Utilizator* u : users)
 	{
 		if (u->getEmail() == email)
 		{
-			this->user_id = u->getId();
-			return true;
+			if (u->getPass() == pass) {
+				this->user_id = u->getId();
+				return true;
+			}
+			else{
+				throw std::runtime_error("Invalid password! Try again");
+				return false;
+			}
 		}
 	}
-	throw "Invalid email! Try again";
+	throw std::runtime_error("Invalid email! Try again");
+	return false;
+}
+
+void LoginHandler::logout()
+{
+	this->user_id = -1;
+	this->should_exit = false;
 }

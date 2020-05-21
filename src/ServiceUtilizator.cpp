@@ -20,9 +20,9 @@ void ServiceUtilizator::add(Utilizator* u)
 	this->repo->add(u->clone());
 }
 
-void ServiceUtilizator::add(std::string name, std::string email, int level)
+void ServiceUtilizator::add(std::string name, std::string email, std::string pass, int level)
 {
-	Utilizator* u = new Utilizator(repo->getSize(), name, email, level);
+	Utilizator* u = new Utilizator(repo->getSize(), name, email, pass, level);
 	UtilizatorValidator::validate(u);
 	this->repo->add(u);
 }
@@ -48,9 +48,9 @@ void ServiceUtilizator::update(Utilizator* uOld, Utilizator* uNew)
 	this->repo->update(uOld, uNew);
 }
 
-void ServiceUtilizator::update(int id, std::string newName, std::string newEmail, int newLevel)
+void ServiceUtilizator::update(int id, std::string newName, std::string newEmail, std::string newPass, int newLevel)
 {
-	Utilizator* u = new Utilizator(id, newName, newEmail, newLevel);
+	Utilizator* u = new Utilizator(id, newName, newEmail, newPass, newLevel);
 	UtilizatorValidator::validate(u);
 	this->repo->update(this->repo->getById(id), u);
 }
@@ -58,4 +58,14 @@ void ServiceUtilizator::update(int id, std::string newName, std::string newEmail
 void ServiceUtilizator::remove(int id)
 {
 	this->repo->remove(this->repo->getById(id));
+}
+
+void ServiceUtilizator::update_clearance(int loggedInId, int actorId, int newLevel)
+{
+	Utilizator s = this->getUtilizatorById(loggedInId);
+	Utilizator a = this->getUtilizatorById(actorId);
+	if (s.getLevel() <= a.getLevel())
+		throw std::runtime_error("Logged in user must have a strictly higher level.");
+	else
+		this->update(actorId, a.getName(), a.getEmail(), a.getPass(), newLevel);
 }

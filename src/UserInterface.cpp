@@ -25,6 +25,7 @@ void UserInterface::login_loop()
 	while (!trigger) {
 		int choice;
 		std::string email;
+		std::string pass;
 		// Show menu
 		std::cout << "1. Login\n\n0. Exit\n";
 		std::cout << "Choice: ";
@@ -36,8 +37,10 @@ void UserInterface::login_loop()
 				//Login
 				std::cout << "Email: ";
 				std::cin >> email;
+				std::cout << "\nPassword: ";
+				std::cin >> pass;
 				try {
-					if (this->lh->login(email))
+					if (this->lh->login(email, pass))
 					{
 						trigger = true;
 						std::cout << "\nSuccessfully logged in!\n\n";
@@ -212,7 +215,7 @@ void UserInterface::loop(int loggedUserId)
 				std::cout << "New user clearance level: ";
 				std::cin >> choice;
 				if (su->getUtilizatorById(loggedUserId).getLevel() > choice)
-					su->update(ut.getId(), ut.getName(), ut.getEmail(), choice);
+					su->update(ut.getId(), ut.getName(), ut.getEmail(), ut.getPass(), choice);
 				else
 					std::cout << "New level must be strictly lower than your level.\n\n\n";
 				break;
